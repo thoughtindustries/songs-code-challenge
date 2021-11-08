@@ -1,8 +1,5 @@
-import { useState } from 'react';
-
-export default function Header({ initialSearch, performSearch }) {
-  const [search, setSearch] = useState(initialSearch);
-
+export default function Header({ search, setSearch}) {
+ // using setSearch prop we dynamically set the search variable on change of the input(search-as-you-type)
   return (
     <section className="py-5 text-center container">
       <div className="row py-lg-5">
@@ -12,15 +9,14 @@ export default function Header({ initialSearch, performSearch }) {
           <form
             onSubmit={e => {
               e.preventDefault();
-              performSearch(search);
+              setSearch(e.target.value || '');
             }}>
             <div className="input-group">
               <input
-                value={search || ''}
+                value={search}
                 onChange={e => {
                   e.preventDefault();
-                  setSearch(e.target.value);
-                }}
+                  setSearch(e.target.value)}}
                 type="text"
                 className="form-control"
                 placeholder="Type a song name, e.g. Slow Dance"

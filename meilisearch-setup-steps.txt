@@ -1,4 +1,24 @@
 Populate this file with the steps you took to get MeiliSearch up and running!
 
-$ docker ...
-$ curl ...
+$ docker pull getmeili/meilisearch:latest 
+
+$ docker run -it --rm \
+    -p 7700:7700 \
+    -v $(pwd)/data.ms:/data.ms \
+    getmeili/meilisearch:latest
+
+$ npm install meilisearch
+
+graphql/songs.js
+    imported MeiliSearch
+    Created new meiliSearch instance
+    document created & index auto created by meiliSearch
+    settings updated to exclude forward slashes from search
+    Query updated so that it now returns songs with meiliesearch results 
+
+pages/[[...q]]/index.js
+    performing search to updated meiliSearch param
+    passing props to header granting ability to dynamically update meilieSearch
+
+components/header.js
+    using props passed to dynamically update meiliSearch based on searchbar input

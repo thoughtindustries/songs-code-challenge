@@ -45,10 +45,11 @@ const SONGS_QUERY = gql`
 
 const fetcher = (page, search) =>
   request('http://localhost:3000/api/graphql', SONGS_QUERY, { page, search });
+  
 
-export default function Songs({ page, search }) {
+export default function Songs({ page, search}) {
   const { data, error } = useSWR([page, search], fetcher);
-
+ 
   if (!data && !error)
     return (
       <div className="mt-5 d-flex justify-content-center">
@@ -69,25 +70,29 @@ export default function Songs({ page, search }) {
     );
   }
 
+
   return (
     <>
-      {data.Songs.songs.length ? (
-        <div className="row row-cols-1 row-cols-sm-3 row-cols-lg-5 g-3">
-          {data.Songs.songs.map(song => (
-            <Song key={song.track_id} song={song} />
-          ))}
-        </div>
-      ) : (
-        <p className="text-center">No Results!</p>
-      )}
-      <Pagination search={search} pageInfo={data.Songs.pageInfo} />
-    </>
+    {data.Songs.songs.length ? ( 
+    <div className="row row-cols-1 row-cols-sm-3 row-cols-lg-5 g-3"> 
+     {data.Songs.songs.map(song => (
+      <Song key={song.track_id} song={song} />
+    ))}</div>
+    ) : (
+      <p className="text-center">No Results!</p>
+    )}
+    <Pagination search={search} pageInfo={data.Songs.pageInfo} />
+  </>
   );
 }
 
 function Pagination({ pageInfo, search }) {
-  const currentPage = pageInfo.currentPage || 1;
-
+  const currentPage = pageInfo.current_page || 1;
+  // current page is undefined(set to the wrong property name) so we are always getting 1.
+  // once we click on the next btn we are adding 1 + 1 so we are always getting two(stuck at page 2).
+  // 2 issues: 
+  // 1 - not accessing correct property 'currentPage' should be 'current_page'
+  // 2 - current_page was not fully implemented. SONGS_QUERY not mapped with the current_page.
   return (
     <nav aria-label="Page navigation">
       <ul className="pagination mt-5 d-flex justify-content-center">
